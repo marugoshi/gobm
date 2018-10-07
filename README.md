@@ -1,2 +1,2 @@
-# godo-server
-todo application server written by golang
+# gobm-server
+bookmark application server written by golang
