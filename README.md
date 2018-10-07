@@ -1,2 +1,2 @@
-# godo
-todo application written by golang
+# godo-server
+todo application server written by golang
