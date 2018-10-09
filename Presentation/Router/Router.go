@@ -73,7 +73,7 @@ type Exchange struct {
 }
 
 func (e *Exchange) Text(code int, body string) {
-	e.ResponseWriter.Header().Set("Content-Type", "text/plain")
+	e.ResponseWriter.Header().Set("Content-Type", TextPlain)
 	e.WriteHeader(code)
 	io.WriteString(e.ResponseWriter, fmt.Sprintf("%s\n", body))
 }
