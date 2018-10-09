@@ -55,7 +55,7 @@ func New(contentType string) *Router {
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	e := &Exchange{ResponseWriter: res, Request: req}
 	for _, route := range r.Routes {
-		if matches := route.Re.FindStringSubmatch(e.URL.Path); len(matches) > 0 {
+		if matches := route.Re.FindStringSubmatch(e.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
 				e.QueryString = matches[1:]
 			}
