@@ -7,10 +7,9 @@ import (
 	"regexp"
 )
 
-type ContentType int
 const (
-	TextPlain ContentType = iota + 1
-	TextHtml
+	TextPlain = "text/plain"
+	TextHtml = "text/html"
 )
 
 type Handler func(e *Exchange)
@@ -27,7 +26,7 @@ type Router struct {
 	ErrorHandler Handler
 }
 
-func New(contentType ContentType) *Router {
+func New(contentType string) *Router {
 	var errorHandler Handler
 	switch contentType {
 	case TextPlain:
