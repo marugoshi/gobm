@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	router := Router.New("text/html")
+	router := Router.New(Router.TextHtml)
 
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
