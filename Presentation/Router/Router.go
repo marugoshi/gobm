@@ -13,19 +13,11 @@ const (
 	TextHtml
 )
 
-type Method int
-const (
-	GET Method = iota + 1
-	POST
-	PUT
-	DELETE
-)
-
 type Handler func(e *Exchange)
 
 type Route struct {
 	Pattern string
-	Method
+	Method string
 	Handler
 	Re *regexp.Regexp
 }
