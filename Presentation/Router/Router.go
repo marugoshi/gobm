@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	TextPlain = "text/plain"
-	TextHtml = "text/html"
+	ContentTypeTextPlain = "text/plain"
+	ContentTypeTextHtml  = "text/html"
 )
 
 type Handler func(e *Exchange)
@@ -29,11 +29,11 @@ type Router struct {
 func New(contentType string) *Router {
 	var errorHandler Handler
 	switch contentType {
-	case TextPlain:
+	case ContentTypeTextPlain:
 		errorHandler = func(e *Exchange) {
 			e.Text(http.StatusNotFound, "Not Found")
 		}
-	case TextHtml:
+	case ContentTypeTextHtml:
 		errorHandler = func(e *Exchange) {
 		}
 	default:
@@ -73,7 +73,7 @@ type Exchange struct {
 }
 
 func (e *Exchange) Text(code int, body string) {
-	e.ResponseWriter.Header().Set("Content-Type", TextPlain)
+	e.ResponseWriter.Header().Set("Content-Type", ContentTypeTextPlain)
 	e.WriteHeader(code)
 	io.WriteString(e.ResponseWriter, fmt.Sprintf("%s\n", body))
 }
