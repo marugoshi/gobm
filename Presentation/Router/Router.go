@@ -26,7 +26,7 @@ type Router struct {
 	ErrorHandler Handler
 }
 
-func New(contentType string) *Router {
+func NewRouter(contentType string) *Router {
 	var errorHandler Handler
 	switch contentType {
 	case ContentTypeTextPlain:
