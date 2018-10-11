@@ -16,7 +16,7 @@ type Handler func(e *Exchange)
 
 type Route struct {
 	Pattern string
-	Method string
+	Method  string
 	Handler
 	Re *regexp.Regexp
 }
