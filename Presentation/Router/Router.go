@@ -27,6 +27,13 @@ type Router struct {
 }
 
 func NewRouter(contentType string) *Router {
+	router := &Router{}
+	router.ErrorHandler = notFoundErrorHandler(contentType)
+	router.Routes = compileRoutes()
+	return router
+}
+
+func notFoundErrorHandler(contentType string) Handler {
 	var errorHandler Handler
 	switch contentType {
 	case ContentTypeTextPlain:
@@ -40,16 +47,16 @@ func NewRouter(contentType string) *Router {
 		errorHandler = func(e *Exchange) {
 		}
 	}
+	return errorHandler
+}
 
-	router := &Router{}
-	router.ErrorHandler = errorHandler
-
+func compileRoutes() []Route {
+	results := make([]Route, 0)
 	for _, route := range Routes {
 		route.Re = regexp.MustCompile(route.Pattern)
-		router.Routes = append(router.Routes, route)
+		results = append(results, route)
 	}
-
-	return router
+	return results
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
