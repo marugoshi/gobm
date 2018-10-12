@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/marugoshi/gobm/Presentation/Router"
+	"github.com/marugoshi/gobm/presentation/router"
 	"log"
 	"net/http"
 )
 
 func main() {
-	router := Router.NewRouter(Router.ContentTypeTextHtml)
+	router := router.NewRouter(router.ContentTypeTextHtml)
 
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
