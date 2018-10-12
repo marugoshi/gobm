@@ -2,20 +2,13 @@ package router
 
 import (
 	"fmt"
+	"github.com/marugoshi/gobm/presentation/httputils"
 	"io"
 	"net/http"
 	"regexp"
 )
 
-const (
-	ContentTypeTextPlain = "text/plain"
-	ContentTypeTextHtml  = "text/html"
-)
-
 type HandleFunc func(e *Exchange)
-func (f HandleFunc) ServeHTTP(e *Exchange) {
-	f(e)
-}
 
 type Route struct {
 	Pattern string
@@ -39,11 +32,11 @@ func NewRouter(contentType string) *Router {
 func notFoundErrorHandler(contentType string) HandleFunc {
 	var errorHandler HandleFunc
 	switch contentType {
-	case ContentTypeTextPlain:
+	case httputils.ContentTypeTextPlain:
 		errorHandler = func(e *Exchange) {
 			e.Text(http.StatusNotFound, "Not Found")
 		}
-	case ContentTypeTextHtml:
+	case httputils.ContentTypeTextHtml:
 		errorHandler = func(e *Exchange) {
 		}
 	default:
@@ -76,14 +69,16 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	r.ErrorHandler(e)
 }
 
+// 消したい
 type Exchange struct {
 	http.ResponseWriter
 	*http.Request
 	Params []string
 }
 
+// ハンドラーが持てばよいのでは？
 func (e *Exchange) Text(code int, body string) {
-	e.ResponseWriter.Header().Set("Content-Type", ContentTypeTextPlain)
+	e.ResponseWriter.Header().Set("Content-Type", httputils.ContentTypeTextPlain)
 	e.WriteHeader(code)
 	io.WriteString(e.ResponseWriter, fmt.Sprintf("%s\n", body))
 }
