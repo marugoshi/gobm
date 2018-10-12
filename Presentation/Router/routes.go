@@ -5,7 +5,7 @@ import (
 )
 
 var Routes = []Route{
-	Route{Pattern: `^/bookmarkschange$`, Method: http.MethodGet, AppHandler: func(e *Exchange) {
+	Route{Pattern: `^/bookmarks$`, Method: http.MethodGet, Handle: func(e *Exchange) {
 		e.Text(200, "hello")
 	}},
 }
