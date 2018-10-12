@@ -12,21 +12,21 @@ const (
 	ContentTypeTextHtml  = "text/html"
 )
 
-type Handle func(e *Exchange)
-func (f Handle) ServeHTTP(e *Exchange) {
+type HandleFunc func(e *Exchange)
+func (f HandleFunc) ServeHTTP(e *Exchange) {
 	f(e)
 }
 
 type Route struct {
 	Pattern string
 	Method  string
-	Handle
+	HandleFunc
 	Re *regexp.Regexp
 }
 
 type Router struct {
 	Routes       []Route
-	ErrorHandler Handle
+	ErrorHandler HandleFunc
 }
 
 func NewRouter(contentType string) *Router {
@@ -36,8 +36,8 @@ func NewRouter(contentType string) *Router {
 	return router
 }
 
-func notFoundErrorHandler(contentType string) Handle {
-	var errorHandler Handle
+func notFoundErrorHandler(contentType string) HandleFunc {
+	var errorHandler HandleFunc
 	switch contentType {
 	case ContentTypeTextPlain:
 		errorHandler = func(e *Exchange) {
@@ -69,7 +69,7 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			if len(matches) > 1 {
 				e.Params = matches[1:]
 			}
-			route.Handle(e)
+			route.HandleFunc(e)
 			return
 		}
 	}
