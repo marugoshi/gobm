@@ -6,41 +6,39 @@ import (
 	"regexp"
 )
 
-type HandleFunc func(res http.ResponseWriter, req *http.Request, params []string) error
-
 type Route struct {
 	Pattern string
 	Method  string
-	HandleFunc
+	httputils.HandleFunc
 	Re *regexp.Regexp
 }
 
 type Router struct {
 	Routes       []Route
-	ErrorHandler HandleFunc
+	httputils.HandleFunc
 }
 
 func NewRouter(contentType string) *Router {
 	router := &Router{}
-	router.ErrorHandler = notFoundErrorHandler(contentType)
+	router.HandleFunc = notFoundErrorHandler(contentType)
 	router.Routes = compileRoutes()
 	return router
 }
 
-func notFoundErrorHandler(contentType string) HandleFunc {
-	var errorHandler HandleFunc
+func notFoundErrorHandler(contentType string) httputils.HandleFunc {
+	var errorHandler httputils.HandleFunc
 	switch contentType {
 	case httputils.ContentTypeTextPlain:
-		errorHandler = func(res http.ResponseWriter, req *http.Request, params []string) error {
+		errorHandler = func(params httputils.HandleFuncParams) error {
 			return nil
 			// e.Text(http.StatusNotFound, "Not Found")
 		}
 	case httputils.ContentTypeTextHtml:
-		errorHandler = func(res http.ResponseWriter, req *http.Request, params []string) error {
+		errorHandler = func(params httputils.HandleFuncParams) error {
 			return nil
 		}
 	default:
-		errorHandler = func(res http.ResponseWriter, req *http.Request, params []string) error {
+		errorHandler = func(params httputils.HandleFuncParams) error {
 			return nil
 		}
 	}
@@ -57,17 +55,17 @@ func compileRoutes() []Route {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	params := make([]string, 0)
+	handleFuncParams := httputils.HandleFuncParams{ResponseWriter: res, Request: req}
 	for _, route := range r.Routes {
 		if matches := route.Re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
-				params = matches[1:]
+				handleFuncParams.Params = matches[1:]
 			}
-			route.HandleFunc(res, req, params)
+			route.HandleFunc(handleFuncParams)
 			return
 		}
 	}
-	r.ErrorHandler(res, req, params)
+	r.HandleFunc(handleFuncParams)
 }
 
 /*
