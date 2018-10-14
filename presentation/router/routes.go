@@ -5,7 +5,7 @@ import (
 )
 
 var Routes = []Route{
-	Route{Pattern: `^/bookmarks$`, Method: http.MethodGet, HandleFunc: func(e *Exchange) {
-		e.Text(200, "hello")
+	Route{Pattern: `^/bookmarks$`, Method: http.MethodGet, HandleFunc: func(res http.ResponseWriter, req *http.Request, params []string) error {
+		return nil
 	}},
 }
