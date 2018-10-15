@@ -26,16 +26,16 @@ func notFoundError(contentType string) httputils.Func {
 	var errorHandler httputils.Func
 	switch contentType {
 	case httputils.ContentTypeTextPlain:
-		errorHandler = func(params httputils.Params) error {
+		errorHandler = func(api httputils.Api) error {
 			return nil
 			// e.Text(http.StatusNotFound, "Not Found")
 		}
 	case httputils.ContentTypeTextHtml:
-		errorHandler = func(params httputils.Params) error {
+		errorHandler = func(api httputils.Api) error {
 			return nil
 		}
 	default:
-		errorHandler = func(params httputils.Params) error {
+		errorHandler = func(api httputils.Api) error {
 			return nil
 		}
 	}
@@ -44,21 +44,21 @@ func notFoundError(contentType string) httputils.Func {
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var routesData = []Route{
-		Route{`^/bookmarks$`, http.MethodGet, func(params httputils.Params) error {
-			return r.Handlers.Bookmarks(params)
+		Route{`^/bookmarks$`, http.MethodGet, func(api httputils.Api) error {
+			return r.Handlers.Bookmarks(api)
 		}},
 	}
 
-	params := httputils.Params{ResponseWriter: res, Request: req}
+	api := httputils.Api{ResponseWriter: res, Request: req}
 	for _, route := range routesData {
 		re := regexp.MustCompile(route.Pattern)
 		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
-				params.Params = matches[1:]
+				api.Params = matches[1:]
 			}
-			route.Func(params)
+			route.Func(api)
 			return
 		}
 	}
-	r.Func(params)
+	r.Func(api)
 }

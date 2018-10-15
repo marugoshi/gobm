@@ -6,16 +6,16 @@ import (
 	"net/http"
 )
 
-type Params struct {
+type Api struct {
 	http.ResponseWriter
 	*http.Request
 	Params []string
 }
 
-func (p *Params) Text(code int, body string) {
-	p.ResponseWriter.Header().Set("Content-Type", ContentTypeTextPlain)
-	p.WriteHeader(code)
-	io.WriteString(p.ResponseWriter, fmt.Sprintf("%s\n", body))
+func (a *Api) Text(code int, body string) {
+	a.ResponseWriter.Header().Set("Content-Type", ContentTypeTextPlain)
+	a.WriteHeader(code)
+	io.WriteString(a.ResponseWriter, fmt.Sprintf("%s\n", body))
 }
 
-type Func func(params Params) error
+type Func func(api Api) error
