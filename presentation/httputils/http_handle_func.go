@@ -10,4 +10,4 @@ type Params struct {
 	Params []string
 }
 
-type Handler func(params Params) error
+type Func func(params Params) error

@@ -26,20 +26,20 @@ func NewRoutes() Routes {
 type Route struct {
 	Pattern *regexp.Regexp
 	Method  string
-	httputils.Handler
+	httputils.Func
 }
 
 type Router struct {
 	Routes
-	httputils.Handler
+	httputils.Func
 }
 
 func NewRouter(contentType string) *Router {
-	return &Router{NewRoutes(), notFoundErrorHandler(contentType)}
+	return &Router{NewRoutes(), notFoundError(contentType)}
 }
 
-func notFoundErrorHandler(contentType string) httputils.Handler {
-	var errorHandler httputils.Handler
+func notFoundError(contentType string) httputils.Func {
+	var errorHandler httputils.Func
 	switch contentType {
 	case httputils.ContentTypeTextPlain:
 		errorHandler = func(params httputils.Params) error {
@@ -59,17 +59,18 @@ func notFoundErrorHandler(contentType string) httputils.Handler {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	handleFuncParams := httputils.Params{ResponseWriter: res, Request: req}
+	params := httputils.Params{ResponseWriter: res, Request: req}
 	for _, route := range r.Routes.Data() {
 		if matches := route.Pattern.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
-				handleFuncParams.Params = matches[1:]
+				params.Params = matches[1:]
 			}
-			route.Handler(handleFuncParams)
+			route.Func(params)
 			return
 		}
 	}
-	r.Handler(handleFuncParams)
+
+	r.Func(params)
 }
 
 /*
