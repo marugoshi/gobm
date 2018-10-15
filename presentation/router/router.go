@@ -20,18 +20,13 @@ func (r *routes) Data() []Route {
 
 func NewRoutes() Routes {
 	routes := &routes{}
-	for _, route := range RoutesData {
-		route.Re = regexp.MustCompile(route.Pattern)
-		routes.data = append(routes.data, route)
-	}
 	return routes
 }
 
 type Route struct {
-	Pattern string
+	Pattern *regexp.Regexp
 	Method  string
 	httputils.Handler
-	Re *regexp.Regexp
 }
 
 type Router struct {
@@ -69,7 +64,7 @@ func notFoundErrorHandler(contentType string) httputils.Handler {
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	handleFuncParams := httputils.Params{ResponseWriter: res, Request: req}
 	for _, route := range r.Routes.Data() {
-		if matches := route.Re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
+		if matches := route.Pattern.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
 				handleFuncParams.Params = matches[1:]
 			}
