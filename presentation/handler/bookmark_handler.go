@@ -5,7 +5,7 @@ import (
 )
 
 type BookmarkHandler interface {
-	Index(params httputils.HandleFuncParams) error
+	Index(params httputils.Params) error
 }
 
 type bookmarkHandler struct {
@@ -16,6 +16,6 @@ func NewBookmarkHandler() BookmarkHandler {
 	return &bookmarkHandler{}
 }
 
-func (b *bookmarkHandler) Index(params httputils.HandleFuncParams) error {
+func (b *bookmarkHandler) Index(params httputils.Params) error {
 	return nil
 }

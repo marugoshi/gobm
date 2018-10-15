@@ -4,10 +4,10 @@ import (
 	"net/http"
 )
 
-type HandleFuncParams struct {
+type Params struct {
 	http.ResponseWriter
 	*http.Request
 	Params []string
 }
 
-type HandleFunc func(params HandleFuncParams) error
+type Handler func(params Params) error
