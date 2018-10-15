@@ -7,6 +7,14 @@ import (
 	"regexp"
 )
 
+func (r *Router) routesData() []Route {
+	return []Route{
+		Route{`^/bookmarks$`, http.MethodGet, func(api httputils.Api) error {
+			return r.Handlers.Bookmarks(api)
+		}},
+	}
+}
+
 type Route struct {
 	Pattern string
 	Method  string
@@ -43,14 +51,8 @@ func notFoundError(contentType string) httputils.Func {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	var routesData = []Route{
-		Route{`^/bookmarks$`, http.MethodGet, func(api httputils.Api) error {
-			return r.Handlers.Bookmarks(api)
-		}},
-	}
-
 	api := httputils.Api{ResponseWriter: res, Request: req}
-	for _, route := range routesData {
+	for _, route := range r.routesData() {
 		re := regexp.MustCompile(route.Pattern)
 		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
