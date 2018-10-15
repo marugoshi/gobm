@@ -1,17 +1,25 @@
 package router
 
 import (
+	"github.com/marugoshi/gobm/presentation/handler"
 	"github.com/marugoshi/gobm/presentation/httputils"
 	"net/http"
+	"regexp"
 )
 
+type Route struct {
+	Pattern string
+	Method  string
+	httputils.Func
+}
+
 type Router struct {
-	Routes
+	handler.Handlers
 	httputils.Func
 }
 
 func NewRouter(contentType string) *Router {
-	return &Router{NewRoutes(), notFoundError(contentType)}
+	return &Router{handler.NewHandlers(), notFoundError(contentType)}
 }
 
 func notFoundError(contentType string) httputils.Func {
@@ -35,9 +43,16 @@ func notFoundError(contentType string) httputils.Func {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	var routesData = []Route{
+		Route{`^/bookmarks$`, http.MethodGet, func(params httputils.Params) error {
+			return r.Handlers.Bookmarks(params)
+		}},
+	}
+
 	params := httputils.Params{ResponseWriter: res, Request: req}
-	for _, route := range r.Routes.Data() {
-		if matches := route.Pattern.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
+	for _, route := range routesData {
+		re := regexp.MustCompile(route.Pattern)
+		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
 				params.Params = matches[1:]
 			}
@@ -47,12 +62,3 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 	r.Func(params)
 }
-
-/*
-// ハンドラーが持てばよいのでは？
-func (e *Exchange) Text(code int, body string) {
-	e.ResponseWriter.Header().Set("Content-Type", httputils.ContentTypeTextPlain)
-	e.WriteHeader(code)
-	io.WriteString(e.ResponseWriter, fmt.Sprintf("%s\n", body))
-}
-*/
