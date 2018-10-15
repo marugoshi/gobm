@@ -35,10 +35,7 @@ type Router struct {
 }
 
 func NewRouter(contentType string) *Router {
-	router := &Router{}
-	router.Handler = notFoundErrorHandler(contentType)
-	router.Routes = NewRoutes()
-	return router
+	return &Router{NewRoutes(), notFoundErrorHandler(contentType)}
 }
 
 func notFoundErrorHandler(contentType string) httputils.Handler {
