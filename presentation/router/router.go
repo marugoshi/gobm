@@ -69,7 +69,6 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 	}
-
 	r.Func(params)
 }
 

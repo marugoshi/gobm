@@ -7,11 +7,11 @@ import (
 )
 
 var RoutesData = []Route{
-	Route{Re(`^/bookmarks$`), http.MethodGet, func(params httputils.Params) error {
+	Route{re(`^/bookmarks$`), http.MethodGet, func(params httputils.Params) error {
 		return nil
 	}},
 }
 
-func Re(path string) *regexp.Regexp {
+func re(path string) *regexp.Regexp {
 	return regexp.MustCompile(path)
 }
