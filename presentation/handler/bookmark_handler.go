@@ -20,11 +20,9 @@ func NewBookmarkHandler(s service.BookmarkService) BookmarkHandler {
 }
 
 func (b *bookmarkHandler) Bookmarks(ctx context.Context, http httputils.Http) error {
-	http.Text(200, "hoge")
-	return nil
+	return b.s.Bookmarks(ctx, http)
 }
 
 func (b *bookmarkHandler) ShowBookmark(ctx context.Context, http httputils.Http) error {
-	http.Text(200, http.Params[0])
-	return nil
+	return b.s.ShowBookmark(ctx, http)
 }
