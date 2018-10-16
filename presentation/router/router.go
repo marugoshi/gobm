@@ -32,16 +32,16 @@ func notFoundError(contentType string) httputils.Func {
 	var errorHandler httputils.Func
 	switch contentType {
 	case httputils.ContentTypeTextPlain:
-		errorHandler = func(api httputils.Api) error {
+		errorHandler = func(http httputils.Http) error {
 			return nil
 			// e.Text(http.StatusNotFound, "Not Found")
 		}
 	case httputils.ContentTypeTextHtml:
-		errorHandler = func(api httputils.Api) error {
+		errorHandler = func(http httputils.Http) error {
 			return nil
 		}
 	default:
-		errorHandler = func(api httputils.Api) error {
+		errorHandler = func(http httputils.Http) error {
 			return nil
 		}
 	}
@@ -49,16 +49,16 @@ func notFoundError(contentType string) httputils.Func {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	api := httputils.Api{ResponseWriter: res, Request: req}
+	http := httputils.Http{ResponseWriter: res, Request: req}
 	for _, route := range r.routesData() {
 		re := regexp.MustCompile(route.Pattern)
 		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
-				api.Params = matches[1:]
+				http.Params = matches[1:]
 			}
-			route.Func(api)
+			route.Func(http)
 			return
 		}
 	}
-	r.Func(api)
+	r.Func(http)
 }
