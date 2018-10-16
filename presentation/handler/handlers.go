@@ -1,5 +1,9 @@
 package handler
 
+import (
+	"github.com/marugoshi/gobm/presentation/service"
+)
+
 type Handlers interface {
 	BookmarkHandler
 }
@@ -9,5 +13,5 @@ type handlers struct {
 }
 
 func NewHandlers() Handlers {
-	return &handlers{NewBookmarkHandler()}
+	return &handlers{NewBookmarkHandler(service.NewBookmarkService())}
 }

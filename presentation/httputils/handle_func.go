@@ -14,7 +14,15 @@ type Http struct {
 }
 
 func (a *Http) Text(code int, body string) {
-	a.ResponseWriter.Header().Set("Content-Type", ContentTypeTextPlain)
+	a.show(code, body, ContentTypeTextPlain)
+}
+
+func (a *Http) Html(code int, body string) {
+	a.show(code, body, ContentTypeTextHtml)
+}
+
+func (a *Http) show(code int, body string, contentType string) {
+	a.ResponseWriter.Header().Set("Content-Type", contentType)
 	a.WriteHeader(code)
 	io.WriteString(a.ResponseWriter, fmt.Sprintf("%s\n", body))
 }

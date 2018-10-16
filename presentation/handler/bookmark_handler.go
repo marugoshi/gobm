@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/marugoshi/gobm/presentation/httputils"
+	"github.com/marugoshi/gobm/presentation/service"
 )
 
 type BookmarkHandler interface {
@@ -11,10 +12,11 @@ type BookmarkHandler interface {
 }
 
 type bookmarkHandler struct {
+	s service.BookmarkService
 }
 
-func NewBookmarkHandler() BookmarkHandler {
-	return &bookmarkHandler{}
+func NewBookmarkHandler(s service.BookmarkService) BookmarkHandler {
+	return &bookmarkHandler{s}
 }
 
 func (b *bookmarkHandler) Bookmarks(ctx context.Context, http httputils.Http) error {
