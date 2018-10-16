@@ -16,7 +16,7 @@ func NewBookmarkHandler() BookmarkHandler {
 	return &bookmarkHandler{}
 }
 
-func (b *bookmarkHandler) Bookmarks(params httputils.Api) error {
-	params.Text(200, "hoge")
+func (b *bookmarkHandler) Bookmarks(api httputils.Api) error {
+	api.Text(200, "hoge")
 	return nil
 }
