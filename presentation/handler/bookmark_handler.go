@@ -6,6 +6,7 @@ import (
 
 type BookmarkHandler interface {
 	Bookmarks(params httputils.Http) error
+	ShowBookmark(params httputils.Http) error
 }
 
 type bookmarkHandler struct {
@@ -17,5 +18,10 @@ func NewBookmarkHandler() BookmarkHandler {
 
 func (b *bookmarkHandler) Bookmarks(http httputils.Http) error {
 	http.Text(200, "hoge")
+	return nil
+}
+
+func (b *bookmarkHandler) ShowBookmark(http httputils.Http) error {
+	http.Text(200, http.Params[0])
 	return nil
 }

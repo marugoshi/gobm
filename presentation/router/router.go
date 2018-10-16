@@ -10,6 +10,7 @@ import (
 func (r *Router) routesData() []Route {
 	return []Route{
 		Route{`^/bookmarks$`, http.MethodGet, r.Handlers.Bookmarks},
+		Route{`^/bookmarks/(\d)$`, http.MethodGet, r.Handlers.ShowBookmark},
 	}
 }
 
@@ -56,8 +57,13 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			if len(matches) > 1 {
 				http.Params = matches[1:]
 			}
-			route.Func(http)
-			return
+			err := route.Func(http)
+			if err != nil {
+				return
+			} else {
+				// TODO: error
+				return
+			}
 		}
 	}
 	r.Func(http)
