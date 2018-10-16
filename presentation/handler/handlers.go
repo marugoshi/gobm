@@ -9,5 +9,5 @@ type handlers struct {
 }
 
 func NewHandlers() Handlers {
-	return &handlers{ NewBookmarkHandler() }
+	return &handlers{NewBookmarkHandler()}
 }

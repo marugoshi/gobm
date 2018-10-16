@@ -9,7 +9,7 @@ import (
 
 func (r *Router) routesData() []Route {
 	return []Route{
-		Route{`^/bookmarks$`, http.MethodGet, r.Handlers.Bookmarks },
+		Route{`^/bookmarks$`, http.MethodGet, r.Handlers.Bookmarks},
 	}
 }
 

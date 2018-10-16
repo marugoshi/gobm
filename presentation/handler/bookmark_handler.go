@@ -9,7 +9,6 @@ type BookmarkHandler interface {
 }
 
 type bookmarkHandler struct {
-
 }
 
 func NewBookmarkHandler() BookmarkHandler {
