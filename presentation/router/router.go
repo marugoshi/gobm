@@ -1,6 +1,7 @@
 package router
 
 import (
+	"context"
 	"github.com/marugoshi/gobm/presentation/handler"
 	"github.com/marugoshi/gobm/presentation/httputils"
 	"net/http"
@@ -33,16 +34,16 @@ func notFoundError(contentType string) httputils.Func {
 	var errorHandler httputils.Func
 	switch contentType {
 	case httputils.ContentTypeTextPlain:
-		errorHandler = func(http httputils.Http) error {
+		errorHandler = func(ctx context.Context, http httputils.Http) error {
 			return nil
 			// e.Text(http.StatusNotFound, "Not Found")
 		}
 	case httputils.ContentTypeTextHtml:
-		errorHandler = func(http httputils.Http) error {
+		errorHandler = func(ctx context.Context, http httputils.Http) error {
 			return nil
 		}
 	default:
-		errorHandler = func(http httputils.Http) error {
+		errorHandler = func(ctx context.Context, http httputils.Http) error {
 			return nil
 		}
 	}
@@ -50,6 +51,7 @@ func notFoundError(contentType string) httputils.Func {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	ctx := req.Context()
 	http := httputils.Http{ResponseWriter: res, Request: req}
 	for _, route := range r.routesData() {
 		re := regexp.MustCompile(route.Pattern)
@@ -57,7 +59,7 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			if len(matches) > 1 {
 				http.Params = matches[1:]
 			}
-			err := route.Func(http)
+			err := route.Func(ctx, http)
 			if err != nil {
 				return
 			} else {
@@ -66,5 +68,5 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			}
 		}
 	}
-	r.Func(http)
+	r.Func(ctx, http)
 }

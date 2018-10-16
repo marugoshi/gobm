@@ -1,6 +1,7 @@
 package httputils
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -18,4 +19,4 @@ func (a *Http) Text(code int, body string) {
 	io.WriteString(a.ResponseWriter, fmt.Sprintf("%s\n", body))
 }
 
-type Func func(http Http) error
+type Func func(ctx context.Context, http Http) error
