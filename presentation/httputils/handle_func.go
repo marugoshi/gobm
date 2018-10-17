@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -18,6 +19,7 @@ type Http struct {
 func (a *Http) Html(code int, name string, path string, data interface{}) error {
 	body, err := a.parse(name, path, data)
 	if err != nil {
+		log.Printf("1: %s", err)
 		return err
 	}
 	return a.show(code, body, ContentTypeTextHtml)
@@ -28,8 +30,7 @@ func (a *Http) RawText(code int, body string) error {
 }
 
 func (a *Http) parse(name string, path string, data interface{}) (string, error) {
-	t := template.New(name)
-	t, err := t.ParseFiles(path)
+	t, err := template.ParseFiles(path)
 	if err != nil {
 		return "", err
 	}
