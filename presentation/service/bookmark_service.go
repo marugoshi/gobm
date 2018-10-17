@@ -18,11 +18,9 @@ func NewBookmarkService() BookmarkService {
 }
 
 func(b *bookmarkService) Bookmarks(ctx context.Context, http httputils.Http) error {
-	http.Text(200, "hoge")
-	return nil
+	return http.RawText(200, "hoge")
 }
 
 func(b *bookmarkService) Bookmark(ctx context.Context, http httputils.Http) error {
-	http.Text(200, http.Params[0])
-	return nil
+	return http.RawText(200, http.Params[0])
 }

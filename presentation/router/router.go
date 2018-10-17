@@ -36,7 +36,7 @@ func notFoundError(contentType string) httputils.Func {
 	case httputils.ContentTypeTextPlain:
 		errorHandler = func(ctx context.Context, http httputils.Http) error {
 			return nil
-			// e.Text(http.StatusNotFound, "Not Found")
+			// e.RawText(http.StatusNotFound, "Not Found")
 		}
 	case httputils.ContentTypeTextHtml:
 		errorHandler = func(ctx context.Context, http httputils.Http) error {
