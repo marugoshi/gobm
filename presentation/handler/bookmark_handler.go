@@ -8,7 +8,7 @@ import (
 
 type BookmarkHandler interface {
 	Bookmarks(ctx context.Context, http httputils.Http) error
-	ShowBookmark(ctx context.Context, http httputils.Http) error
+	Bookmark(ctx context.Context, http httputils.Http) error
 }
 
 type bookmarkHandler struct {
@@ -23,6 +23,6 @@ func (b *bookmarkHandler) Bookmarks(ctx context.Context, http httputils.Http) er
 	return b.s.Bookmarks(ctx, http)
 }
 
-func (b *bookmarkHandler) ShowBookmark(ctx context.Context, http httputils.Http) error {
-	return b.s.ShowBookmark(ctx, http)
+func (b *bookmarkHandler) Bookmark(ctx context.Context, http httputils.Http) error {
+	return b.s.Bookmark(ctx, http)
 }
