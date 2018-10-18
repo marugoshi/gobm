@@ -12,10 +12,12 @@ type BookmarkService interface {
 }
 
 type bookmarkService struct {
+	pathPrefix string
 }
 
 func NewBookmarkService() BookmarkService {
-	return &bookmarkService{}
+	current, _ := os.Getwd()
+	return &bookmarkService{current + "/presentation/view/bookmark"}
 }
 
 func(b *bookmarkService) Bookmarks(ctx context.Context, http httputils.Http) error {
@@ -24,8 +26,7 @@ func(b *bookmarkService) Bookmarks(ctx context.Context, http httputils.Http) err
 	}{
 		Key: "hoge",
 	}
-	current, _ := os.Getwd()
-	return http.Html(200, "index", current + "/presentation/view/bookmark/index.html", data)
+	return http.Html(200, "index", b.pathPrefix + "/index.html", data)
 }
 
 func(b *bookmarkService) Bookmark(ctx context.Context, http httputils.Http) error {
