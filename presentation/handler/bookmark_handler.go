@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/marugoshi/gobm/presentation/httputils"
-	"github.com/marugoshi/gobm/presentation/service"
+	"github.com/marugoshi/gobm/service"
 )
 
 type BookmarkHandler interface {
