@@ -2,33 +2,33 @@ package service
 
 import (
 	"context"
-	"github.com/marugoshi/gobm/presentation/httputils"
-	"os"
 )
 
 type BookmarkService interface {
-	Bookmarks(ctx context.Context, http httputils.Http) error
-	Bookmark(ctx context.Context, http httputils.Http) error
+	Bookmarks(ctx context.Context) (interface{}, error)
+	Bookmark(ctx context.Context, id int) (interface{}, error)
 }
 
-type bookmarkService struct {
-	pathPrefix string
-}
+type bookmarkService struct {}
 
 func NewBookmarkService() BookmarkService {
-	current, _ := os.Getwd()
-	return &bookmarkService{current + "/presentation/view/bookmark"}
+	return &bookmarkService{}
 }
 
-func(b *bookmarkService) Bookmarks(ctx context.Context, http httputils.Http) error {
+func(b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
 	data := struct{
 		Key string
 	}{
 		Key: "hoge",
 	}
-	return http.Html(200, "index", b.pathPrefix + "/index.html", data)
+	return data, nil
 }
 
-func(b *bookmarkService) Bookmark(ctx context.Context, http httputils.Http) error {
-	return http.RawText(200, http.Params[0])
+func(b *bookmarkService) Bookmark(ctx context.Context, id int) (interface{}, error) {
+	data := struct{
+		Key string
+	}{
+		Key: "hoge",
+	}
+	return data, nil
 }

@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/marugoshi/gobm/presentation/httputils"
 	"github.com/marugoshi/gobm/domain/service"
+	"os"
+	"strconv"
 )
 
 type BookmarkHandler interface {
@@ -13,16 +15,27 @@ type BookmarkHandler interface {
 
 type bookmarkHandler struct {
 	s service.BookmarkService
+	prefix string
 }
 
 func NewBookmarkHandler(s service.BookmarkService) BookmarkHandler {
-	return &bookmarkHandler{s}
+	current, _ := os.Getwd()
+	return &bookmarkHandler{s, current + "/presentation/view/bookmark"}
 }
 
 func (b *bookmarkHandler) Bookmarks(ctx context.Context, http httputils.Http) error {
-	return b.s.Bookmarks(ctx, http)
+	data, err := b.s.Bookmarks(ctx)
+	if err != nil {
+		return err
+	}
+	return http.Html(200, "index", b.prefix + "/index.html", data)
 }
 
 func (b *bookmarkHandler) Bookmark(ctx context.Context, http httputils.Http) error {
-	return b.s.Bookmark(ctx, http)
+	id, _ := strconv.Atoi(http.Params[0])
+	data, err := b.s.Bookmark(ctx, id)
+	if err != nil {
+		return err
+	}
+	return http.Html(200, "index", b.prefix + "/show.html", data)
 }
