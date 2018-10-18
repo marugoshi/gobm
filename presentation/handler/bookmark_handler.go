@@ -9,8 +9,8 @@ import (
 )
 
 type BookmarkHandler interface {
-	Bookmarks(ctx context.Context, http httputils.Http) error
-	Bookmark(ctx context.Context, http httputils.Http) error
+	Bookmarks(ctx context.Context, api httputils.Api) error
+	Bookmark(ctx context.Context, api httputils.Api) error
 }
 
 type bookmarkHandler struct {
@@ -23,19 +23,19 @@ func NewBookmarkHandler(s service.BookmarkService) BookmarkHandler {
 	return &bookmarkHandler{s, current + "/presentation/view/bookmark"}
 }
 
-func (b *bookmarkHandler) Bookmarks(ctx context.Context, http httputils.Http) error {
+func (b *bookmarkHandler) Bookmarks(ctx context.Context, api httputils.Api) error {
 	data, err := b.s.Bookmarks(ctx)
 	if err != nil {
 		return err
 	}
-	return http.Html(200, "index", b.prefix + "/index.html", data)
+	return api.Html(200, "index", b.prefix + "/index.html", data)
 }
 
-func (b *bookmarkHandler) Bookmark(ctx context.Context, http httputils.Http) error {
-	id, _ := strconv.Atoi(http.Params[0])
+func (b *bookmarkHandler) Bookmark(ctx context.Context, api httputils.Api) error {
+	id, _ := strconv.Atoi(api.Params[0])
 	data, err := b.s.Bookmark(ctx, id)
 	if err != nil {
 		return err
 	}
-	return http.Html(200, "index", b.prefix + "/show.html", data)
+	return api.Html(200, "index", b.prefix + "/show.html", data)
 }

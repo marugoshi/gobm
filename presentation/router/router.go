@@ -34,16 +34,16 @@ func notFoundError(contentType string) httputils.Func {
 	var errorHandler httputils.Func
 	switch contentType {
 	case httputils.ContentTypeTextPlain:
-		errorHandler = func(ctx context.Context, http httputils.Http) error {
+		errorHandler = func(ctx context.Context, api httputils.Api) error {
 			return nil
 			// e.RawText(http.StatusNotFound, "Not Found")
 		}
 	case httputils.ContentTypeTextHtml:
-		errorHandler = func(ctx context.Context, http httputils.Http) error {
+		errorHandler = func(ctx context.Context, api httputils.Api) error {
 			return nil
 		}
 	default:
-		errorHandler = func(ctx context.Context, http httputils.Http) error {
+		errorHandler = func(ctx context.Context, api httputils.Api) error {
 			return nil
 		}
 	}
@@ -52,14 +52,14 @@ func notFoundError(contentType string) httputils.Func {
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
-	http := httputils.Http{ResponseWriter: res, Request: req}
+	api := httputils.Api{ResponseWriter: res, Request: req}
 	for _, route := range r.routesData() {
 		re := regexp.MustCompile(route.Pattern)
 		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
 			if len(matches) > 1 {
-				http.Params = matches[1:]
+				api.Params = matches[1:]
 			}
-			err := route.Func(ctx, http)
+			err := route.Func(ctx, api)
 			if err != nil {
 				return
 			} else {
@@ -68,5 +68,5 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			}
 		}
 	}
-	r.Func(ctx, http)
+	r.Func(ctx, api)
 }

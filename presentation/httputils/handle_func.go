@@ -10,13 +10,13 @@ import (
 	"net/http"
 )
 
-type Http struct {
+type Api struct {
 	http.ResponseWriter
 	*http.Request
 	Params []string
 }
 
-func (a *Http) Html(code int, name string, path string, data interface{}) error {
+func (a *Api) Html(code int, name string, path string, data interface{}) error {
 	body, err := a.parse(name, path, data)
 	if err != nil {
 		log.Printf("1: %s", err)
@@ -25,11 +25,11 @@ func (a *Http) Html(code int, name string, path string, data interface{}) error 
 	return a.show(code, body, ContentTypeTextHtml)
 }
 
-func (a *Http) RawText(code int, body string) error {
+func (a *Api) RawText(code int, body string) error {
 	return a.show(code, body, ContentTypeTextPlain)
 }
 
-func (a *Http) parse(name string, path string, data interface{}) (string, error) {
+func (a *Api) parse(name string, path string, data interface{}) (string, error) {
 	t, err := template.ParseFiles(path)
 	if err != nil {
 		return "", err
@@ -41,11 +41,11 @@ func (a *Http) parse(name string, path string, data interface{}) (string, error)
 	return tpl.String(), nil
 }
 
-func (a *Http) show(code int, body string, contentType string) error {
+func (a *Api) show(code int, body string, contentType string) error {
 	a.ResponseWriter.Header().Set("Content-Type", contentType)
 	a.WriteHeader(code)
 	_, err := io.WriteString(a.ResponseWriter, fmt.Sprintf("%s\n", body))
 	return err
 }
 
-type Func func(ctx context.Context, http Http) error
+type Func func(ctx context.Context, api Api) error
