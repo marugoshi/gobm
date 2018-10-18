@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/marugoshi/gobm/service"
+	"github.com/marugoshi/gobm/domain/service"
 )
 
 type Handlers interface {
