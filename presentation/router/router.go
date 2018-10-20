@@ -34,20 +34,21 @@ func notFoundError(contentType string) httputils.Func {
 	var errorHandler httputils.Func
 	switch contentType {
 	case httputils.ContentTypeTextPlain:
-		errorHandler = func(ctx context.Context, api httputils.Api) error {
-			return nil
-			// e.RawText(http.StatusNotFound, "Not Found")
-		}
+		errorHandler = notFoundErrorTextPlain
 	case httputils.ContentTypeTextHtml:
-		errorHandler = func(ctx context.Context, api httputils.Api) error {
-			return nil
-		}
+		errorHandler = notFoundErrorTextHtml
 	default:
-		errorHandler = func(ctx context.Context, api httputils.Api) error {
-			return nil
-		}
+		errorHandler = notFoundErrorTextPlain
 	}
 	return errorHandler
+}
+
+func notFoundErrorTextPlain(ctx context.Context, api httputils.Api) error {
+	return nil
+}
+
+func notFoundErrorTextHtml(ctx context.Context, api httputils.Api) error {
+	return nil
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
