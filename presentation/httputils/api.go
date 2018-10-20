@@ -15,8 +15,8 @@ type Api struct {
 	Params []string
 }
 
-func (a *Api) Html(code int, name string, path string, data interface{}) error {
-	body, err := a.parse(name, path, data)
+func (a *Api) Html(code int, path string, data interface{}) error {
+	body, err := a.parse(path, data)
 	if err != nil {
 		log.Printf("1: %s", err)
 		return err
@@ -28,7 +28,7 @@ func (a *Api) RawText(code int, body string) error {
 	return a.show(code, body, ContentTypeTextPlain)
 }
 
-func (a *Api) parse(name string, path string, data interface{}) (string, error) {
+func (a *Api) parse(path string, data interface{}) (string, error) {
 	t, err := template.ParseFiles(path)
 	if err != nil {
 		return "", err

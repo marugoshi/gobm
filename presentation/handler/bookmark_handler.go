@@ -28,7 +28,7 @@ func (b *bookmarkHandler) Bookmarks(ctx context.Context, api httputils.Api) erro
 	if err != nil {
 		return err
 	}
-	return api.Html(200, "index", b.prefix+"/index.html", data)
+	return api.Html(200, b.prefix+"/index.html", data)
 }
 
 func (b *bookmarkHandler) Bookmark(ctx context.Context, api httputils.Api) error {
@@ -37,5 +37,5 @@ func (b *bookmarkHandler) Bookmark(ctx context.Context, api httputils.Api) error
 	if err != nil {
 		return err
 	}
-	return api.Html(200, "index", b.prefix+"/show.html", data)
+	return api.Html(200, b.prefix+"/show.html", data)
 }
