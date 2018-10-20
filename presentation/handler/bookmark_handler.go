@@ -2,8 +2,8 @@ package handler
 
 import (
 	"context"
-	"github.com/marugoshi/gobm/presentation/httputils"
 	"github.com/marugoshi/gobm/domain/service"
+	"github.com/marugoshi/gobm/presentation/httputils"
 	"os"
 	"strconv"
 )
@@ -14,7 +14,7 @@ type BookmarkHandler interface {
 }
 
 type bookmarkHandler struct {
-	s service.BookmarkService
+	s      service.BookmarkService
 	prefix string
 }
 
@@ -28,7 +28,7 @@ func (b *bookmarkHandler) Bookmarks(ctx context.Context, api httputils.Api) erro
 	if err != nil {
 		return err
 	}
-	return api.Html(200, "index", b.prefix + "/index.html", data)
+	return api.Html(200, "index", b.prefix+"/index.html", data)
 }
 
 func (b *bookmarkHandler) Bookmark(ctx context.Context, api httputils.Api) error {
@@ -37,5 +37,5 @@ func (b *bookmarkHandler) Bookmark(ctx context.Context, api httputils.Api) error
 	if err != nil {
 		return err
 	}
-	return api.Html(200, "index", b.prefix + "/show.html", data)
+	return api.Html(200, "index", b.prefix+"/show.html", data)
 }

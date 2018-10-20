@@ -9,14 +9,14 @@ type BookmarkService interface {
 	Bookmark(ctx context.Context, id int) (interface{}, error)
 }
 
-type bookmarkService struct {}
+type bookmarkService struct{}
 
 func NewBookmarkService() BookmarkService {
 	return &bookmarkService{}
 }
 
-func(b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
-	data := struct{
+func (b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
+	data := struct {
 		Key string
 	}{
 		Key: "hoge",
@@ -24,8 +24,8 @@ func(b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
 	return data, nil
 }
 
-func(b *bookmarkService) Bookmark(ctx context.Context, id int) (interface{}, error) {
-	data := struct{
+func (b *bookmarkService) Bookmark(ctx context.Context, id int) (interface{}, error) {
+	data := struct {
 		Key string
 	}{
 		Key: "hoge",
