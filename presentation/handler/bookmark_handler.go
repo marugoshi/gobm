@@ -14,7 +14,7 @@ type BookmarkHandler interface {
 }
 
 type bookmarkHandler struct {
-	s      service.BookmarkService
+	service.BookmarkService
 	prefix string
 }
 
@@ -24,7 +24,7 @@ func NewBookmarkHandler(s service.BookmarkService) BookmarkHandler {
 }
 
 func (b *bookmarkHandler) Bookmarks(ctx context.Context, api httputils.Api) error {
-	data, err := b.s.Bookmarks(ctx)
+	data, err := b.BookmarkService.Bookmarks(ctx)
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func (b *bookmarkHandler) Bookmarks(ctx context.Context, api httputils.Api) erro
 
 func (b *bookmarkHandler) Bookmark(ctx context.Context, api httputils.Api) error {
 	id, _ := strconv.Atoi(api.Params[0])
-	data, err := b.s.Bookmark(ctx, id)
+	data, err := b.BookmarkService.Bookmark(ctx, id)
 	if err != nil {
 		return err
 	}
