@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -18,7 +17,6 @@ type Api struct {
 func (a *Api) Html(code int, path string, data interface{}) error {
 	body, err := a.parse(path, data)
 	if err != nil {
-		log.Printf("1: %s", err)
 		return err
 	}
 	return a.show(code, body, ContentTypeTextHtml)
