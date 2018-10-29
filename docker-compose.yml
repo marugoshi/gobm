@@ -1,11 +1,22 @@
 version: "3"
 services:
-  gobm:
+  app:
     build: .
     image: marugoshi/gobm
-    container_name: gobm
+    links:
+      - mysql
     ports:
       - "8080:8080"
     volumes:
      - ".:/go/src/github.com/marugoshi/gobm"
     command: go run main.go
+
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: test
