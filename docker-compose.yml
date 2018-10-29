@@ -8,13 +8,16 @@ services:
     ports:
       - "8080:8080"
     volumes:
-     - ".:/go/src/github.com/marugoshi/gobm"
+      - ".:/go/src/github.com/marugoshi/gobm"
     command: go run main.go
 
   mysql:
     image: mysql
     ports:
       - "3306:3306"
+    volumes:
+      - "./tmp/mysql/data:/var/lib/mysql"
+      - "./tmp/mysql/log:/var/log/mysql"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: test
