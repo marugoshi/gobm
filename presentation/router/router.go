@@ -2,16 +2,16 @@ package router
 
 import (
 	"context"
-	"github.com/marugoshi/gobm/presentation/handler"
 	"github.com/marugoshi/gobm/presentation/httputils"
+	"github.com/marugoshi/gobm/registry"
 	"net/http"
 	"regexp"
 )
 
 func (r *Router) routesData() []Route {
 	return []Route{
-		Route{`^/bookmarks$`, http.MethodGet, r.Handlers.Bookmarks},
-		Route{`^/bookmarks/(\d*)$`, http.MethodGet, r.Handlers.Bookmark},
+		Route{`^/bookmarks$`, http.MethodGet, r.Registry.HandleBookmarks},
+		Route{`^/bookmarks/(\d*)$`, http.MethodGet, r.Registry.HandleBookmark},
 	}
 }
 
@@ -22,12 +22,12 @@ type Route struct {
 }
 
 type Router struct {
-	handler.Handlers
+	registry.Registry
 	httputils.Func
 }
 
-func NewRouter(contentType string) *Router {
-	return &Router{handler.NewHandlers(), notFoundError(contentType)}
+func NewRouter(registry registry.Registry, contentType string) *Router {
+	return &Router{registry, notFoundError(contentType)}
 }
 
 func notFoundError(contentType string) httputils.Func {
