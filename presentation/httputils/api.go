@@ -22,10 +22,6 @@ func (a *Api) Html(code int, path string, data interface{}) error {
 	return a.show(code, body, ContentTypeTextHtml)
 }
 
-func (a *Api) RawText(code int, body string) error {
-	return a.show(code, body, ContentTypeTextPlain)
-}
-
 func (a *Api) parse(path string, data interface{}) (string, error) {
 	t, err := template.ParseFiles(path)
 	if err != nil {

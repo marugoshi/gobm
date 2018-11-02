@@ -34,18 +34,12 @@ func NewRouter(registry registry.Registry, contentType string) *Router {
 func notFoundError(contentType string) httputils.Func {
 	var errorHandler httputils.Func
 	switch contentType {
-	case httputils.ContentTypeTextPlain:
-		errorHandler = notFoundErrorTextPlain
 	case httputils.ContentTypeTextHtml:
 		errorHandler = notFoundErrorTextHtml
 	default:
-		errorHandler = notFoundErrorTextPlain
+		errorHandler = notFoundErrorTextHtml
 	}
 	return errorHandler
-}
-
-func notFoundErrorTextPlain(ctx context.Context, api httputils.Api) error {
-	return nil
 }
 
 func notFoundErrorTextHtml(ctx context.Context, api httputils.Api) error {
