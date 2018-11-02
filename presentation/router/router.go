@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/marugoshi/gobm/presentation/httputils"
 	"github.com/marugoshi/gobm/registry"
+	"log"
 	"net/http"
 	"regexp"
 )
@@ -62,9 +63,9 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			}
 			err := route.Func(ctx, api)
 			if err != nil {
+				log.Fatal(err)
 				return
 			} else {
-				// TODO: error
 				return
 			}
 		}

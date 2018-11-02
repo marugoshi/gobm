@@ -1,17 +1,18 @@
 package registry
 
 import (
+	"database/sql"
 	"github.com/marugoshi/gobm/domain/service"
+	"github.com/marugoshi/gobm/infrastructure/storage/mysql"
 	"github.com/marugoshi/gobm/presentation/handler"
 )
 
 type Registry struct {
-	service.BookmarkService
 	handler.BookmarkHandler
 }
 
 func NewRegistry() Registry {
-	bookmarkService := service.NewBookmarkService()
-	bookmarkHandler := handler.NewBookmarkHandler(bookmarkService)
-	return Registry{bookmarkService, bookmarkHandler}
+	db, _ := sql.Open("mysql", "root@/gobm_d")
+	bookmarkHandler := handler.NewBookmarkHandler(service.NewBookmarkService(mysql.NewBookmarkModel(db)))
+	return Registry{bookmarkHandler}
 }

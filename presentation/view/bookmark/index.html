@@ -1,2 +1,6 @@
-test
-{{ .Key }}
+{{range .Records}}
+  {{.Id}}
+  {{.Url}}
+  {{.Title}}
+  {{.Memo}}
+{{end}}
