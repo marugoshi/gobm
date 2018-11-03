@@ -15,12 +15,15 @@ type BookmarkHandler interface {
 
 type bookmarkHandler struct {
 	service.BookmarkService
-	prefix string
+	partialDir  string
+	templateDir string
 }
 
 func NewBookmarkHandler(s service.BookmarkService) BookmarkHandler {
 	current, _ := os.Getwd()
-	return &bookmarkHandler{s, current + "/presentation/view/bookmark"}
+	partialDir := current + "/presentation/view/partial/"
+	templateDir := current + "/presentation/view/bookmark/"
+	return &bookmarkHandler{s, partialDir, templateDir}
 }
 
 func (b *bookmarkHandler) HandleBookmarks(ctx context.Context, api httputils.Api) error {
@@ -28,7 +31,7 @@ func (b *bookmarkHandler) HandleBookmarks(ctx context.Context, api httputils.Api
 	if err != nil {
 		return err
 	}
-	return api.Html(200, b.prefix+"/index.html", data)
+	return api.Html(200, data, b.templateDir+"index.html", b.partialDir+"header.html", b.partialDir+"footer.html")
 }
 
 func (b *bookmarkHandler) HandleBookmark(ctx context.Context, api httputils.Api) error {
@@ -37,5 +40,5 @@ func (b *bookmarkHandler) HandleBookmark(ctx context.Context, api httputils.Api)
 	if err != nil {
 		return err
 	}
-	return api.Html(200, b.prefix+"/show.html", data)
+	return api.Html(200, data, b.templateDir+"show.html")
 }

@@ -64,5 +64,12 @@ func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			}
 		}
 	}
+
+	staticRe := regexp.MustCompile(`^/static`)
+	if staticMatch := staticRe.MatchString(req.URL.Path); staticMatch {
+		http.ServeFile(res, req, req.URL.Path[1:])
+		return
+	}
+
 	r.Func(ctx, api)
 }

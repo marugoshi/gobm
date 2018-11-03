@@ -14,16 +14,16 @@ type Api struct {
 	Params []string
 }
 
-func (a *Api) Html(code int, path string, data interface{}) error {
-	body, err := a.parse(path, data)
+func (a *Api) Html(code int, data interface{}, paths ...string) error {
+	body, err := a.parse(data, paths...)
 	if err != nil {
 		return err
 	}
 	return a.show(code, body, ContentTypeTextHtml)
 }
 
-func (a *Api) parse(path string, data interface{}) (string, error) {
-	t, err := template.ParseFiles(path)
+func (a *Api) parse(data interface{}, paths ...string) (string, error) {
+	t, err := template.ParseFiles(paths...)
 	if err != nil {
 		return "", err
 	}

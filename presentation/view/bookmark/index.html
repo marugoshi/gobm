@@ -1,6 +1,12 @@
+{{ template "header.html" . }}
+
+<ul>
 {{range .Records}}
-  {{.Id}}
-  {{.Url}}
-  {{.Title}}
-  {{.Memo}}
+    <li>{{.Id}}</li>
+    <li>{{.Url}}</li>
+    <li>{{.Title}}</li>
+    <li>{{.Memo}}</li>
 {{end}}
+</ul>
+
+{{ template "footer.html" . }}

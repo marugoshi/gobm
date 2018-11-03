@@ -1,5 +1,5 @@
 package httputils
 
 const (
-	ContentTypeTextHtml  = "text/html"
+	ContentTypeTextHtml = "text/html"
 )

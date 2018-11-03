@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	id int
-	url string
+	id    int
+	url   string
 	title string
-	memo string
+	memo  string
 )
 
 type BookmarkModel struct {
