@@ -9,4 +9,5 @@ CREATE TABLE bookmarks (
   PRIMARY KEY(id),
   UNIQUE(url(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-INSERT INTO bookmarks (url, title, memo) VALUES("https://www.makototokuyama.com", "MAKOTO TOKUYAMA", "test");
+INSERT INTO bookmarks (url, title, memo) VALUES("https://www.makototokuyama.com", "MAKOTO TOKUYAMA", "test1");
+INSERT INTO bookmarks (url, title, memo) VALUES("https://t.makototokuyama.com", "T MAKOTO TOKUYAMA", "test2");
