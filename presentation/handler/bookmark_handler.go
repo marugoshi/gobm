@@ -40,13 +40,13 @@ func (b *bookmarkHandler) BookmarkShow(ctx context.Context, api httputils.Api) e
 	if err != nil {
 		return err
 	}
-	return api.Html(200, data, b.templateDir+"show.html")
+	return api.Html(200, data, b.templates("show.html")...)
 }
 
 func (b *bookmarkHandler) templates(main string) []string {
 	results := []string{}
+	results = append(results, b.templateDir+main)
 	results = append(results, b.partialDir+"header.html")
 	results = append(results, b.partialDir+"footer.html")
-	results = append(results, b.templateDir+main)
 	return results
 }
