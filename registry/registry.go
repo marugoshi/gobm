@@ -8,11 +8,12 @@ import (
 )
 
 type Registry struct {
+	*sql.DB
 	handler.BookmarkHandler
 }
 
 func NewRegistry() Registry {
 	db, _ := sql.Open("mysql", "root@/gobm_d")
 	bookmarkHandler := handler.NewBookmarkHandler(service.NewBookmarkService(mysql.NewBookmarkModel(db)))
-	return Registry{bookmarkHandler}
+	return Registry{db,bookmarkHandler}
 }
