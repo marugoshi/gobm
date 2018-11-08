@@ -10,7 +10,7 @@ import (
 
 type BookmarkHandler interface {
 	BookmarkIndex(ctx context.Context, api httputils.Api) error
-	BookmarkShow(ctx context.Context, api httputils.Api) error
+	BookmarkEdit(ctx context.Context, api httputils.Api) error
 }
 
 type bookmarkHandler struct {
@@ -34,13 +34,13 @@ func (b *bookmarkHandler) BookmarkIndex(ctx context.Context, api httputils.Api) 
 	return api.Html(200, data, b.templates("index.html")...)
 }
 
-func (b *bookmarkHandler) BookmarkShow(ctx context.Context, api httputils.Api) error {
+func (b *bookmarkHandler) BookmarkEdit(ctx context.Context, api httputils.Api) error {
 	id, _ := strconv.Atoi(api.Params[0])
 	data, err := b.BookmarkService.Bookmark(ctx, id)
 	if err != nil {
 		return err
 	}
-	return api.Html(200, data, b.templates("show.html")...)
+	return api.Html(200, data, b.templates("edit.html")...)
 }
 
 func (b *bookmarkHandler) templates(main string) []string {

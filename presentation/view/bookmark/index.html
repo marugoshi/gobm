@@ -1,9 +1,9 @@
-{{ template "header" . }}
+{{template "header" .}}
 
 <ul>
 {{range .Records}}
-    <li><a>EDIT</a>&nbsp;/&nbsp;<a href="{{.Url}}" target="_blank">{{.Title}}</a></li>
+    <li><a href="/bookmarks/{{.Id}}/edit">EDIT</a>&nbsp;/&nbsp;<a href="{{.Url}}" target="_blank">{{.Title}}</a></li>
 {{end}}
 </ul>
 
-{{ template "footer" . }}
+{{template "footer" .}}

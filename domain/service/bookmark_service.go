@@ -27,10 +27,9 @@ func (b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
 }
 
 func (b *bookmarkService) Bookmark(ctx context.Context, id int) (interface{}, error) {
-	data := struct {
-		Key string
-	}{
-		Key: "hoge",
+	bookmark, err := b.BookmarkModel.FindById(ctx, id)
+	if err != nil {
+		return nil, nil
 	}
-	return data, nil
+	return bookmark, nil
 }

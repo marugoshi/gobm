@@ -12,7 +12,7 @@ import (
 func (r *Router) routesData() []Route {
 	return []Route{
 		Route{`^/bookmarks$`, http.MethodGet, r.Registry.BookmarkIndex},
-		Route{`^/bookmarks/(\d*)$`, http.MethodGet, r.Registry.BookmarkShow},
+		Route{`^/bookmarks/(\d*)/edit$`, http.MethodGet, r.Registry.BookmarkEdit},
 	}
 }
 

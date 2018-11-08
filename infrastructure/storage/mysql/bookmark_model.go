@@ -47,5 +47,10 @@ func (b *BookmarkModel) All(ctx context.Context, page int, perPage int) (interfa
 }
 
 func (b *BookmarkModel) FindById(ctx context.Context, id int) (interface{}, error) {
-	return nil, nil
+	if err := b.DB.QueryRow("SELECT * FROM bookmarks WHERE id = ?", id).Scan(&id, &url, &title, &memo); err != nil {
+		return nil, nil
+	}
+
+	record := &data.Bookmark{id, url, title, memo}
+	return record, nil
 }
