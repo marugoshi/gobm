@@ -31,7 +31,7 @@ func (b *bookmarkHandler) BookmarkIndex(ctx context.Context, api httputils.Api) 
 	if err != nil {
 		return err
 	}
-	return api.Html(200, data, b.templateDir+"index.html", b.partialDir+"header.html", b.partialDir+"footer.html")
+	return api.Html(200, data, b.templates("index.html")...)
 }
 
 func (b *bookmarkHandler) BookmarkShow(ctx context.Context, api httputils.Api) error {
@@ -41,4 +41,12 @@ func (b *bookmarkHandler) BookmarkShow(ctx context.Context, api httputils.Api) e
 		return err
 	}
 	return api.Html(200, data, b.templateDir+"show.html")
+}
+
+func (b *bookmarkHandler) templates(main string) []string {
+	results := []string{}
+	results = append(results, b.partialDir+"header.html")
+	results = append(results, b.partialDir+"footer.html")
+	results = append(results, b.templateDir+main)
+	return results
 }
