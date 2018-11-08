@@ -2,10 +2,7 @@
 
 <ul>
 {{range .Records}}
-    <li>{{.Id}}</li>
-    <li>{{.Url}}</li>
-    <li>{{.Title}}</li>
-    <li>{{.Memo}}</li>
+    <li><a>EDIT</a>&nbsp;/&nbsp;<a href="{{.Url}}" target="_blank">{{.Title}}</a></li>
 {{end}}
 </ul>
 
