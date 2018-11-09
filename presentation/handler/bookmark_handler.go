@@ -11,6 +11,8 @@ import (
 
 type BookmarkHandler interface {
 	BookmarkIndex(ctx context.Context, api httputils.Api) error
+	BookmarkNew(ctx context.Context, api httputils.Api) error
+	BookmarkCreate(ctx context.Context, api httputils.Api) error
 	BookmarkEdit(ctx context.Context, api httputils.Api) error
 	BookmarkUpdate(ctx context.Context, api httputils.Api) error
 }
@@ -36,8 +38,25 @@ func (b *bookmarkHandler) BookmarkIndex(ctx context.Context, api httputils.Api) 
 	return api.Html(200, a, b.templates("index.html")...)
 }
 
+func (b *bookmarkHandler) BookmarkNew(ctx context.Context, api httputils.Api) error {
+	return api.Html(200, nil, b.templates("new.html")...)
+}
+
+func (b *bookmarkHandler) BookmarkCreate(ctx context.Context, api httputils.Api) error {
+	title := api.Request.FormValue("title")
+	url := api.Request.FormValue("url")
+	memo := api.Request.FormValue("memo")
+	params := &data.Bookmark{0, url, title, memo}
+	_, err := b.BookmarkService.Create(ctx, params)
+	if err != nil {
+		return err
+	}
+	// TODO: redirect
+	return b.BookmarkIndex(ctx, api)
+}
+
 func (b *bookmarkHandler) BookmarkEdit(ctx context.Context, api httputils.Api) error {
-	id, _ := strconv.Atoi(api.Params[0])
+	id, _ := strconv.ParseInt(api.Params[0], 10, 64)
 	a, err := b.BookmarkService.Bookmark(ctx, id)
 	if err != nil {
 		return err
@@ -46,7 +65,7 @@ func (b *bookmarkHandler) BookmarkEdit(ctx context.Context, api httputils.Api) e
 }
 
 func (b *bookmarkHandler) BookmarkUpdate(ctx context.Context, api httputils.Api) error {
-	id, _ := strconv.Atoi(api.Params[0])
+	id, _ := strconv.ParseInt(api.Params[0], 10, 64)
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
 	memo := api.Request.FormValue("memo")
@@ -55,6 +74,7 @@ func (b *bookmarkHandler) BookmarkUpdate(ctx context.Context, api httputils.Api)
 	if err != nil {
 		return err
 	}
+	// TODO: redirect
 	return api.Html(200, a, b.templates("edit.html")...)
 }
 

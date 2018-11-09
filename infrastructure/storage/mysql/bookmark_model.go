@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	id    int
+	id    int64
 	url   string
 	title string
 	memo  string
@@ -46,13 +46,22 @@ func (b *BookmarkModel) All(ctx context.Context, page int, perPage int) (interfa
 	return data, nil
 }
 
-func (b *BookmarkModel) FindById(ctx context.Context, id int) (interface{}, error) {
+func (b *BookmarkModel) FindById(ctx context.Context, id int64) (interface{}, error) {
 	if err := b.DB.QueryRow("SELECT * FROM bookmarks WHERE id = ?", id).Scan(&id, &url, &title, &memo); err != nil {
 		return nil, nil
 	}
 
 	record := &data.Bookmark{id, url, title, memo}
 	return record, nil
+}
+
+func (b *BookmarkModel) Create(ctx context.Context, params *data.Bookmark) (interface{}, error) {
+	result, err := b.DB.Exec("INSERT INTO bookmarks (url, title, memo) VALUES(?, ?, ?)", params.Url, params.Title, params.Memo)
+	if err != nil {
+		return nil, nil
+	}
+	id, _ := result.LastInsertId()
+	return b.FindById(ctx, id)
 }
 
 func (b *BookmarkModel) Update(ctx context.Context, params *data.Bookmark) (interface{}, error) {

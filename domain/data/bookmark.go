@@ -1,7 +1,7 @@
 package data
 
 type Bookmark struct {
-	Id    int
+	Id    int64
 	Url   string
 	Title string
 	Memo  string

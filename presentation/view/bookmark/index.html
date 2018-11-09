@@ -1,5 +1,7 @@
 {{template "header" .}}
 
+<a href="/bookmarks/new">作成</a>
+
 <ul>
 {{range .Records}}
     <li><a href="/bookmarks/{{.Id}}/edit">EDIT</a>&nbsp;/&nbsp;<a href="{{.Url}}" target="_blank">{{.Title}}</a></li>
