@@ -54,3 +54,13 @@ func (b *BookmarkModel) FindById(ctx context.Context, id int) (interface{}, erro
 	record := &data.Bookmark{id, url, title, memo}
 	return record, nil
 }
+
+func (b *BookmarkModel) Update(ctx context.Context, params *data.Bookmark) (interface{}, error) {
+	tx, _ := b.DB.Begin()
+	_, err := tx.Exec("UPDATE bookmarks SET url = ?, title = ?, memo = ? WHERE id = ?", params.Url, params.Title, params.Memo, params.Id)
+	if err != nil {
+		return nil, nil
+	}
+	tx.Commit()
+	return b.FindById(ctx, params.Id)
+}

@@ -1,5 +1,18 @@
 {{template "header" .}}
 
-{{.Id}}
+<form action="/bookmarks/{{.Id}}" method="post">
+    <dl>
+        <dt>ID</dt>
+        <dd>{{.Id}}</dd>
+        <dt>タイトル</dt>
+        <dd><input type text name="title" value="{{.Title}}" /></dd>
+        <dt>URL</dt>
+        <dd><input type text name="url" value="{{.Url}}" /></dd>
+        <dt>メモ</dt>
+        <dd><textarea name="memo">{{.Memo}}</textarea></dd>
+    </dl>
+    <input type="hidden" name="_method" value="PUT">
+    <input type="submit" value="更新" />
+</form>
 
 {{template "footer" .}}

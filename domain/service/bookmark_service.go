@@ -2,12 +2,14 @@ package service
 
 import (
 	"context"
+	"github.com/marugoshi/gobm/domain/data"
 	"github.com/marugoshi/gobm/domain/model"
 )
 
 type BookmarkService interface {
 	Bookmarks(ctx context.Context) (interface{}, error)
 	Bookmark(ctx context.Context, id int) (interface{}, error)
+	Update(ctx context.Context, bookmark *data.Bookmark) (interface{}, error)
 }
 
 type bookmarkService struct {
@@ -28,6 +30,14 @@ func (b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
 
 func (b *bookmarkService) Bookmark(ctx context.Context, id int) (interface{}, error) {
 	bookmark, err := b.BookmarkModel.FindById(ctx, id)
+	if err != nil {
+		return nil, nil
+	}
+	return bookmark, nil
+}
+
+func (b *bookmarkService) Update(ctx context.Context, params *data.Bookmark) (interface{}, error) {
+	bookmark, err := b.BookmarkModel.Update(ctx, params)
 	if err != nil {
 		return nil, nil
 	}

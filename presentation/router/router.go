@@ -13,6 +13,7 @@ func (r *Router) routesData() []Route {
 	return []Route{
 		Route{`^/bookmarks$`, http.MethodGet, r.Registry.BookmarkIndex},
 		Route{`^/bookmarks/(\d*)/edit$`, http.MethodGet, r.Registry.BookmarkEdit},
+		Route{`^/bookmarks/(\d*)$`, http.MethodPut, r.Registry.BookmarkUpdate},
 	}
 }
 
@@ -47,11 +48,16 @@ func notFoundErrorTextHtml(ctx context.Context, api httputils.Api) error {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	method := req.FormValue("_method")
+	if method == "" {
+		method = req.Method
+	}
+
 	ctx := req.Context()
 	api := httputils.Api{ResponseWriter: res, Request: req}
 	for _, route := range r.routesData() {
 		re := regexp.MustCompile(route.Pattern)
-		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == req.Method {
+		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == method {
 			if len(matches) > 1 {
 				api.Params = matches[1:]
 			}
