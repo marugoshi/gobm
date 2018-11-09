@@ -15,5 +15,5 @@ type Registry struct {
 func NewRegistry() Registry {
 	db, _ := sql.Open("mysql", "root@/gobm_d")
 	bookmarkHandler := handler.NewBookmarkHandler(service.NewBookmarkService(mysql.NewBookmarkModel(db)))
-	return Registry{db,bookmarkHandler}
+	return Registry{db, bookmarkHandler}
 }
