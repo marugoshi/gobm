@@ -11,7 +11,7 @@ type BookmarkService interface {
 	Bookmark(ctx context.Context, id int64) (interface{}, error)
 	Create(ctx context.Context, bookmark *data.Bookmark) (interface{}, error)
 	Update(ctx context.Context, bookmark *data.Bookmark) (interface{}, error)
-	Delete(ctx context.Context, id int64) (error)
+	Delete(ctx context.Context, id int64) error
 }
 
 type bookmarkService struct {
@@ -25,7 +25,7 @@ func NewBookmarkService(m model.BookmarkModel) BookmarkService {
 func (b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
 	bookmarks, err := b.BookmarkModel.All(ctx, 1, 100)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return bookmarks, nil
 }
@@ -33,7 +33,7 @@ func (b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
 func (b *bookmarkService) Bookmark(ctx context.Context, id int64) (interface{}, error) {
 	bookmark, err := b.BookmarkModel.FindById(ctx, id)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return bookmark, nil
 }
@@ -41,7 +41,7 @@ func (b *bookmarkService) Bookmark(ctx context.Context, id int64) (interface{}, 
 func (b *bookmarkService) Create(ctx context.Context, params *data.Bookmark) (interface{}, error) {
 	bookmark, err := b.BookmarkModel.Create(ctx, params)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return bookmark, nil
 }
@@ -49,12 +49,12 @@ func (b *bookmarkService) Create(ctx context.Context, params *data.Bookmark) (in
 func (b *bookmarkService) Update(ctx context.Context, params *data.Bookmark) (interface{}, error) {
 	bookmark, err := b.BookmarkModel.Update(ctx, params)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return bookmark, nil
 }
 
-func (b *bookmarkService) Delete(ctx context.Context, id int64) (error) {
+func (b *bookmarkService) Delete(ctx context.Context, id int64) error {
 	err := b.BookmarkModel.Delete(ctx, id)
 	if err != nil {
 		return err
