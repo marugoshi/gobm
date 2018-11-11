@@ -10,4 +10,5 @@ type BookmarkModel interface {
 	FindById(ctx context.Context, id int64) (interface{}, error)
 	Create(ctx context.Context, params *data.Bookmark) (interface{}, error)
 	Update(ctx context.Context, params *data.Bookmark) (interface{}, error)
+	Delete(ctx context.Context, id int64) (error)
 }

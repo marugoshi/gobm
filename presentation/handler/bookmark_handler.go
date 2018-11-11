@@ -15,6 +15,7 @@ type BookmarkHandler interface {
 	BookmarkCreate(ctx context.Context, api httputils.Api) error
 	BookmarkEdit(ctx context.Context, api httputils.Api) error
 	BookmarkUpdate(ctx context.Context, api httputils.Api) error
+	BookmarkDelete(ctx context.Context, api httputils.Api) error
 }
 
 type bookmarkHandler struct {
@@ -76,6 +77,16 @@ func (b *bookmarkHandler) BookmarkUpdate(ctx context.Context, api httputils.Api)
 	}
 	// TODO: redirect
 	return api.Html(200, a, b.templates("edit.html")...)
+}
+
+func (b *bookmarkHandler) BookmarkDelete(ctx context.Context, api httputils.Api) error {
+	id, _ := strconv.ParseInt(api.Params[0], 10, 64)
+	err := b.BookmarkService.Delete(ctx, id)
+	if err != nil {
+		return err
+	}
+	// TODO: redirect
+	return b.BookmarkIndex(ctx, api)
 }
 
 func (b *bookmarkHandler) templates(main string) []string {

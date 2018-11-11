@@ -73,3 +73,13 @@ func (b *BookmarkModel) Update(ctx context.Context, params *data.Bookmark) (inte
 	tx.Commit()
 	return b.FindById(ctx, params.Id)
 }
+
+func (b *BookmarkModel) Delete(ctx context.Context, id int64) (error) {
+	tx, _ := b.DB.Begin()
+	_, err := tx.Exec("DELETE FROM bookmarks WHERE id = ?", id)
+	if err != nil {
+		return nil
+	}
+	tx.Commit()
+	return nil
+}

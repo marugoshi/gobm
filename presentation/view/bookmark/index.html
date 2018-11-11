@@ -5,6 +5,10 @@
 <ul>
 {{range .Records}}
     <li><a href="/bookmarks/{{.Id}}/edit">EDIT</a>&nbsp;/&nbsp;<a href="{{.Url}}" target="_blank">{{.Title}}</a></li>
+    <form action="/bookmarks/{{.Id}}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="submit" value="削除" />
+    </form>
 {{end}}
 </ul>
 

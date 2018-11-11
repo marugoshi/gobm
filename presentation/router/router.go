@@ -16,6 +16,7 @@ func (r *Router) routesData() []Route {
 		Route{`^/bookmarks$`, http.MethodPost, r.Registry.BookmarkCreate},
 		Route{`^/bookmarks/(\d*)/edit$`, http.MethodGet, r.Registry.BookmarkEdit},
 		Route{`^/bookmarks/(\d*)$`, http.MethodPatch, r.Registry.BookmarkUpdate},
+		Route{`^/bookmarks/(\d*)$`, http.MethodDelete, r.Registry.BookmarkDelete},
 	}
 }
 
