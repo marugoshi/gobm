@@ -5,8 +5,8 @@ import (
 )
 
 type Bookmark struct {
-	Id    int64
+	Id          int64
 	DirectoryId sql.NullInt64
-	Url   string
-	Title string
+	Url         string
+	Title       string
 }

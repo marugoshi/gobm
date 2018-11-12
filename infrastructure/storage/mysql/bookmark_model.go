@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	id    int64
+	id           int64
 	directory_id sql.NullInt64
-	url   string
-	title string
+	url          string
+	title        string
 )
 
 type BookmarkModel struct {
@@ -51,7 +51,7 @@ func (b *BookmarkModel) FindById(ctx context.Context, id int64) (interface{}, er
 		return nil, err
 	}
 
-	record := &data.Bookmark{id, directory_id,url, title}
+	record := &data.Bookmark{id, directory_id, url, title}
 	return record, nil
 }
 
