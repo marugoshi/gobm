@@ -28,7 +28,7 @@ type Route struct {
 
 type Router struct {
 	registry.Registry
-	httputils.Func
+	NotFound httputils.Func
 }
 
 func NewRouter(registry registry.Registry, contentType string) *Router {
@@ -51,34 +51,49 @@ func notFoundErrorTextHtml(ctx context.Context, api httputils.Api) error {
 }
 
 func (r *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	method := req.FormValue("_method")
-	if method == "" {
-		method = req.Method
-	}
-
 	ctx := req.Context()
 	api := httputils.Api{ResponseWriter: res, Request: req}
-	for _, route := range r.routesData() {
+
+	if !r.serveHTTP(ctx, api, r.routesData()) {
+		if !r.serveStaticHTTP(res, req) {
+			r.NotFound(ctx, api)
+		}
+	}
+}
+
+func (r *Router) serveHTTP(ctx context.Context, api httputils.Api, routes []Route) bool {
+	method := r.normalizeMethod(api.Request)
+	for _, route := range routes {
 		re := regexp.MustCompile(route.Pattern)
-		if matches := re.FindStringSubmatch(req.URL.Path); len(matches) > 0 && route.Method == method {
+		if matches := re.FindStringSubmatch(api.Request.URL.Path); len(matches) > 0 && route.Method == method {
 			if len(matches) > 1 {
 				api.Params = matches[1:]
 			}
 			err := route.Func(ctx, api)
 			if err != nil {
 				log.Fatal(err)
-				return
+				return true
 			} else {
-				return
+				return true
 			}
 		}
 	}
+	return false
+}
 
+func (r *Router) normalizeMethod(req *http.Request) string {
+	method := req.FormValue("_method")
+	if method == "" {
+		method = req.Method
+	}
+	return method
+}
+
+func (r *Router) serveStaticHTTP(res http.ResponseWriter, req *http.Request) bool {
 	staticRe := regexp.MustCompile(`^/static`)
 	if staticMatch := staticRe.MatchString(req.URL.Path); staticMatch {
 		http.ServeFile(res, req, req.URL.Path[1:])
-		return
+		return true
 	}
-
-	r.Func(ctx, api)
+	return false
 }
