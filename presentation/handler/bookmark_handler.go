@@ -46,8 +46,7 @@ func (b *bookmarkHandler) BookmarkNew(ctx context.Context, api httputils.Api) er
 func (b *bookmarkHandler) BookmarkCreate(ctx context.Context, api httputils.Api) error {
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	memo := api.Request.FormValue("memo")
-	params := &data.Bookmark{0, url, title, memo}
+	params := &data.Bookmark{0, url, title}
 	_, err := b.BookmarkService.Create(ctx, params)
 	if err != nil {
 		return err
@@ -69,8 +68,7 @@ func (b *bookmarkHandler) BookmarkUpdate(ctx context.Context, api httputils.Api)
 	id, _ := strconv.ParseInt(api.Params[0], 10, 64)
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	memo := api.Request.FormValue("memo")
-	params := &data.Bookmark{id, url, title, memo}
+	params := &data.Bookmark{id, url, title}
 	a, err := b.BookmarkService.Update(ctx, params)
 	if err != nil {
 		return err
