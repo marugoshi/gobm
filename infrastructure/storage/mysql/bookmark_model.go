@@ -10,6 +10,7 @@ import (
 
 var (
 	id    int64
+	directory_id sql.NullInt64
 	url   string
 	title string
 )
@@ -30,10 +31,10 @@ func (b *BookmarkModel) All(ctx context.Context, page int, perPage int) (interfa
 	}
 	records := make([]*data.Bookmark, 0)
 	for rows.Next() {
-		if err := rows.Scan(&id, &url, &title); err != nil {
+		if err := rows.Scan(&id, &directory_id, &url, &title); err != nil {
 			return nil, err
 		}
-		records = append(records, &data.Bookmark{id, url, title})
+		records = append(records, &data.Bookmark{id, directory_id, url, title})
 	}
 
 	data := struct {
@@ -46,16 +47,16 @@ func (b *BookmarkModel) All(ctx context.Context, page int, perPage int) (interfa
 }
 
 func (b *BookmarkModel) FindById(ctx context.Context, id int64) (interface{}, error) {
-	if err := b.DB.QueryRow("SELECT * FROM bookmarks WHERE id = ?", id).Scan(&id, &url, &title); err != nil {
+	if err := b.DB.QueryRow("SELECT * FROM bookmarks WHERE id = ?", id).Scan(&id, &directory_id, &url, &title); err != nil {
 		return nil, err
 	}
 
-	record := &data.Bookmark{id, url, title}
+	record := &data.Bookmark{id, directory_id,url, title}
 	return record, nil
 }
 
 func (b *BookmarkModel) Create(ctx context.Context, params *data.Bookmark) (interface{}, error) {
-	result, err := b.DB.Exec("INSERT INTO bookmarks (url, title) VALUES(?, ?, ?)", params.Url, params.Title)
+	result, err := b.DB.Exec("INSERT INTO bookmarks (url, directory_id, title) VALUES(?, ?, ?)", params.Url, params.DirectoryId, params.Title)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +66,7 @@ func (b *BookmarkModel) Create(ctx context.Context, params *data.Bookmark) (inte
 
 func (b *BookmarkModel) Update(ctx context.Context, params *data.Bookmark) (interface{}, error) {
 	tx, _ := b.DB.Begin()
-	_, err := tx.Exec("UPDATE bookmarks SET url = ?, title = ?, WHERE id = ?", params.Url, params.Title, params.Id)
+	_, err := tx.Exec("UPDATE bookmarks SET directory_id = ?, url = ?, title = ? WHERE id = ?", params.DirectoryId, params.Url, params.Title, params.Id)
 	if err != nil {
 		return nil, err
 	}

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"database/sql"
 	"github.com/marugoshi/gobm/domain/data"
 	"github.com/marugoshi/gobm/domain/service"
 	"github.com/marugoshi/gobm/presentation/httputils"
@@ -44,9 +45,11 @@ func (b *bookmarkHandler) BookmarkNew(ctx context.Context, api httputils.Api) er
 }
 
 func (b *bookmarkHandler) BookmarkCreate(ctx context.Context, api httputils.Api) error {
+	orgDirectoryId, _ := strconv.ParseInt(api.Request.FormValue("directory_id"), 10, 64)
+	directoryId := sql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	params := &data.Bookmark{0, url, title}
+	params := &data.Bookmark{0, directoryId, url, title}
 	_, err := b.BookmarkService.Create(ctx, params)
 	if err != nil {
 		return err
@@ -66,9 +69,11 @@ func (b *bookmarkHandler) BookmarkEdit(ctx context.Context, api httputils.Api) e
 
 func (b *bookmarkHandler) BookmarkUpdate(ctx context.Context, api httputils.Api) error {
 	id, _ := strconv.ParseInt(api.Params[0], 10, 64)
+	orgDirectoryId, _ := strconv.ParseInt(api.Request.FormValue("directory_id"), 10, 64)
+	directoryId := sql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	params := &data.Bookmark{id, url, title}
+	params := &data.Bookmark{id, directoryId, url, title}
 	a, err := b.BookmarkService.Update(ctx, params)
 	if err != nil {
 		return err
