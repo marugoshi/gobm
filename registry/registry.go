@@ -12,8 +12,11 @@ type Registry struct {
 	handler.BookmarkHandler
 }
 
-func NewRegistry() Registry {
-	db, _ := sql.Open("mysql", "root@/gobm_d")
+func NewRegistry() (Registry, error) {
+	db, err := sql.Open("mysql", "root@/gobm_d")
+	if err != nil {
+		return Registry{}, err
+	}
 	bookmarkHandler := handler.NewBookmarkHandler(service.NewBookmarkService(mysql.NewBookmarkModel(db)))
-	return Registry{db, bookmarkHandler}
+	return Registry{db, bookmarkHandler}, nil
 }
