@@ -21,6 +21,18 @@ build:
 exec:
 	docker-compose exec gobm bash
 
+run:
+	docker-compose exec gobm bash -c 'go run main.go'
+
+reset_db:
+	docker-compose exec gobm bash -c 'mysql -h mysql -uroot -ppassword < ./sql/init.sql'
+
+migrate_up:
+	docker-compose exec gobm bash -c 'migrate -path sql/migrations -database mysql://root:password@tcp\(mysql:3306\)/gobm_d up'
+
+migrate_create:
+	docker-compose exec gobm bash -c 'migrate create -dir sql/migrations -ext sql ${NAME}'
+
 mysql:
 	docker-compose exec gobm bash -c 'mysql -h mysql -uroot -ppassword gobm_d'
 

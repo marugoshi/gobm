@@ -13,7 +13,7 @@ type Registry struct {
 }
 
 func NewRegistry() (Registry, error) {
-	db, err := sql.Open("mysql", "root@/gobm_d")
+	db, err := sql.Open("mysql", "root:password@tcp(mysql:3306)/gobm_d?parseTime=true&loc=Asia%%2FTokyo")
 	if err != nil {
 		return Registry{}, err
 	}

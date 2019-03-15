@@ -1,0 +1,7 @@
+CREATE TABLE directories (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  parent_id BIGINT UNSIGNED,
+  name varchar(255) NOT NULL,
+  PRIMARY KEY(id),
+  INDEX(parent_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

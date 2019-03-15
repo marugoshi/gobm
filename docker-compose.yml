@@ -17,8 +17,8 @@ services:
     volumes:
       - "./tmp/mysql/data:/var/lib/mysql"
       - "./tmp/mysql/log:/var/log/mysql"
+      - "./tmp/mysql/conf:/etc/mysql/conf.d"
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
-      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: password
+      TZ: Asia/Tokyo
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

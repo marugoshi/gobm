@@ -5,6 +5,13 @@ ENV TZ Asia/Tokyo
 
 WORKDIR /go/src/github.com/marugoshi/gobm
 
+RUN apt-get update -qq \
+    && apt-get install -y --no-install-recommends \
+    default-libmysqlclient-dev \
+    mysql-client \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY Gopkg.toml Gopkg.lock ./
 
 RUN go get -u github.com/golang/dep/cmd/dep \
