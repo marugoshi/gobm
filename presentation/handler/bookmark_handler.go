@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 	"database/sql"
-	"github.com/marugoshi/gobm/domain/data"
+	"github.com/marugoshi/gobm/domain/entity"
 	"github.com/marugoshi/gobm/domain/service"
 	"github.com/marugoshi/gobm/presentation/httputils"
 	"os"
@@ -49,7 +49,7 @@ func (b *bookmarkHandler) BookmarkCreate(ctx context.Context, api httputils.Api)
 	directoryId := sql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	params := &data.Bookmark{0, directoryId, url, title}
+	params := &entity.Bookmark{0, directoryId, url, title}
 	_, err := b.BookmarkService.Create(ctx, params)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (b *bookmarkHandler) BookmarkUpdate(ctx context.Context, api httputils.Api)
 	directoryId := sql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	params := &data.Bookmark{id, directoryId, url, title}
+	params := &entity.Bookmark{id, directoryId, url, title}
 	a, err := b.BookmarkService.Update(ctx, params)
 	if err != nil {
 		return err
