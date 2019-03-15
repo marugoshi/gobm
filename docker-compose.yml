@@ -1,6 +1,6 @@
 version: "3"
 services:
-  app:
+  gobm:
     build: .
     image: marugoshi/gobm
     links:
@@ -9,8 +9,7 @@ services:
       - "8080:8080"
     volumes:
       - ".:/go/src/github.com/marugoshi/gobm"
-    command: go run main.go
-
+    tty: true
   mysql:
     image: mysql
     ports:
