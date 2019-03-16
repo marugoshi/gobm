@@ -8,12 +8,14 @@ restart:
 	make down
 	make up
 
+.PHONY: images
 images:
 	docker-compose build --no-cache
 
 dep:
 	docker-compose exec gobm bash -c 'dep ensure'
 
+.PHONY: build
 build:
 	make clean
 	docker-compose exec gobm bash -c './build.sh'
@@ -33,6 +35,7 @@ migrate_up:
 migrate_create:
 	docker-compose exec gobm bash -c 'migrate create -dir sql/migrations -ext sql ${NAME}'
 
+.PHONY: mysql
 mysql:
 	docker-compose exec gobm bash -c 'mysql -h mysql -uroot -ppassword gobm_d'
 
@@ -44,5 +47,3 @@ logs:
 
 fmt:
 	docker-compose exec gobm bash -c 'go fmt ./...'
-
-.PHONY: mysql test build dep builds deploy
