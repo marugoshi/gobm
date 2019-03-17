@@ -3,12 +3,30 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.9
+      - image: circleci/golang:1.12
         environment:
-          APP_ENV: test
+          DB_USER: root
+          DB_PASS: ""
+          DB_HOST: 127.0.0.1
+          DB_NAME: gobm_t
     working_directory: /go/src/github.com/marugoshi/gobm
     steps:
       - checkout
+      - run:
+          name: install mysql client
+          command: sudo apt install -y mysql-client
+      - run:
+          name: install migrate
+          command: cd /go/bin && curl -L https://github.com/golang-migrate/migrate/releases/download/v4.2.5/migrate.linux-amd64.tar.gz | tar xvz && mv migrate.linux-amd64 migrate && cd /go/src/github.com/marugoshi/gobm
+      - run:
+          name: wait launch db
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: create test database
+          command: mysql -h 127.0.0.1 -uroot -e "DROP DATABASE IF EXISTS gobm_t; CREATE DATABASE gobm_t CHARACTER SET utf8mb4;"
+      - run:
+          name: create tables
+          command: migrate -path sql/migrations -database mysql://root:@tcp\(127.0.0.1:3306\)/gobm_t up
       - run:
           name: vendoring
           command: go get -v -t -d ./...

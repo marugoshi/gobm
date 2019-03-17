@@ -1,3 +1,5 @@
+DB = gobm_d
+
 up:
 	docker-compose up -d
 
@@ -27,10 +29,10 @@ run:
 	docker-compose exec gobm bash -c 'go run main.go'
 
 reset_db:
-	docker-compose exec gobm bash -c 'mysql -h mysql -uroot -ppassword < ./sql/init.sql'
+	docker-compose exec gobm bash -c 'mysql -h mysql -uroot -ppassword -e "DROP DATABASE IF EXISTS ${DB}; CREATE DATABASE ${DB} CHARACTER SET utf8mb4;"'
 
 migrate_up:
-	docker-compose exec gobm bash -c 'migrate -path sql/migrations -database mysql://root:password@tcp\(mysql:3306\)/gobm_d up'
+	docker-compose exec gobm bash -c 'migrate -path sql/migrations -database mysql://root:password@tcp\(mysql:3306\)/${DB} up'
 
 migrate_create:
 	docker-compose exec gobm bash -c 'migrate create -dir sql/migrations -ext sql ${NAME}'
@@ -50,4 +52,6 @@ fmt:
 
 .PHONY: test
 test:
+	make reset_db DB=gobm_t
+	make migrate_up DB=gobm_t
 	docker-compose exec gobm bash -c 'go test ./...'
