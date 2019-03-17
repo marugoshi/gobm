@@ -9,6 +9,10 @@ jobs:
           DB_PASS: ""
           DB_HOST: 127.0.0.1
           DB_NAME: gobm_t
+      - image: circleci/mysql:8.0.12
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
     working_directory: /go/src/github.com/marugoshi/gobm
     steps:
       - checkout
