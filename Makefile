@@ -47,3 +47,7 @@ logs:
 
 fmt:
 	docker-compose exec gobm bash -c 'go fmt ./...'
+
+.PHONY: test
+test:
+	docker-compose exec gobm bash -c 'go test ./...'
