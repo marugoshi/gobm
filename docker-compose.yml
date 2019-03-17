@@ -15,9 +15,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./tmp/mysql/data:/var/lib/mysql"
-      - "./tmp/mysql/log:/var/log/mysql"
-      - "./tmp/mysql/conf:/etc/mysql/conf.d"
+      - "./mysql/data:/var/lib/mysql"
+      - "./mysql/log:/var/log/mysql"
+      - "./mysql/conf:/etc/mysql/conf.d"
     environment:
       MYSQL_ROOT_PASSWORD: password
       TZ: Asia/Tokyo
