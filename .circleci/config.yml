@@ -1,0 +1,17 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9
+        environment:
+          APP_ENV: test
+    working_directory: /go/src/github.com/marugoshi/gobm
+    steps:
+      - checkout
+      - run:
+          name: vendoring
+          command: go get -v -t -d ./...
+      - run:
+          name: run test
+          command: go test -v ./...
