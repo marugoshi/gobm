@@ -1,7 +1,8 @@
-package app_log
+package app_log_test
 
 import (
 	"bytes"
+	. "github.com/marugoshi/gobm/shared/app_log"
 	"regexp"
 	"testing"
 )
