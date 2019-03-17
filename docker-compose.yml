@@ -9,6 +9,11 @@ services:
       - "8080:8080"
     volumes:
       - ".:/go/src/github.com/marugoshi/gobm"
+    environment:
+      DB_USER: root
+      DB_PASS: password
+      DB_HOST: mysql
+      DB_NAME: gobm_d
     tty: true
   mysql:
     image: mysql
