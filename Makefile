@@ -54,4 +54,5 @@ fmt:
 test:
 	make reset_db DB=gobm_t
 	make migrate_up DB=gobm_t
+	# docker-compose exec gobm bash -c 'mysql -h mysql -uroot -ppassword gobm_t < testdata/masters.sql'
 	docker-compose exec gobm bash -c 'go test ./...'

@@ -2,9 +2,9 @@ package handler
 
 import (
 	"context"
-	"database/sql"
 	"github.com/marugoshi/gobm/domain/entity"
 	"github.com/marugoshi/gobm/domain/service"
+	"github.com/marugoshi/gobm/infrastructure/storage/mysql"
 	"github.com/marugoshi/gobm/presentation/httputils"
 	"os"
 	"strconv"
@@ -33,7 +33,9 @@ func NewBookmarkHandler(s service.BookmarkService) BookmarkHandler {
 }
 
 func (b *bookmarkHandler) BookmarkIndex(ctx context.Context, api httputils.Api) error {
-	a, err := b.BookmarkService.Bookmarks(ctx)
+	page, _ := strconv.Atoi(api.Request.FormValue("page"))
+	perPage, _ := strconv.Atoi(api.Request.FormValue("per_page"))
+	a, err := b.BookmarkService.Bookmarks(ctx, page, perPage)
 	if err != nil {
 		return err
 	}
@@ -46,10 +48,15 @@ func (b *bookmarkHandler) BookmarkNew(ctx context.Context, api httputils.Api) er
 
 func (b *bookmarkHandler) BookmarkCreate(ctx context.Context, api httputils.Api) error {
 	orgDirectoryId, _ := strconv.ParseInt(api.Request.FormValue("directory_id"), 10, 64)
-	directoryId := sql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
+	directoryId := mysql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	params := &entity.Bookmark{0, directoryId, url, title}
+	params := &entity.Bookmark{
+		Id:          0,
+		DirectoryId: directoryId,
+		Url:         url,
+		Title:       title,
+	}
 	_, err := b.BookmarkService.Create(ctx, params)
 	if err != nil {
 		return err
@@ -70,10 +77,15 @@ func (b *bookmarkHandler) BookmarkEdit(ctx context.Context, api httputils.Api) e
 func (b *bookmarkHandler) BookmarkUpdate(ctx context.Context, api httputils.Api) error {
 	id, _ := strconv.ParseInt(api.Params[0], 10, 64)
 	orgDirectoryId, _ := strconv.ParseInt(api.Request.FormValue("directory_id"), 10, 64)
-	directoryId := sql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
+	directoryId := mysql.NullInt64{orgDirectoryId, orgDirectoryId != 0}
 	title := api.Request.FormValue("title")
 	url := api.Request.FormValue("url")
-	params := &entity.Bookmark{id, directoryId, url, title}
+	params := &entity.Bookmark{
+		Id:          id,
+		DirectoryId: directoryId,
+		Url:         url,
+		Title:       title,
+	}
 	a, err := b.BookmarkService.Update(ctx, params)
 	if err != nil {
 		return err
