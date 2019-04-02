@@ -7,7 +7,7 @@ jobs:
         environment:
           DB_USER: root
           DB_PASS: ""
-          DB_HOST: 127.0.0.1
+          DB_HOST: localhost
           DB_NAME: gobm_t
       - image: circleci/mysql:8.0.12
         command: mysqld --default-authentication-plugin=mysql_native_password
@@ -27,10 +27,10 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: create test database
-          command: mysql -h 127.0.0.1 -uroot -e "DROP DATABASE IF EXISTS gobm_t; CREATE DATABASE gobm_t CHARACTER SET utf8mb4;"
+          command: mysql -h localhost -uroot -e "DROP DATABASE IF EXISTS gobm_t; CREATE DATABASE gobm_t CHARACTER SET utf8mb4;"
       - run:
           name: create tables
-          command: migrate -path sql/migrations -database mysql://root:@tcp\(127.0.0.1:3306\)/gobm_t up
+          command: migrate -path sql/migrations -database mysql://root:@tcp\(localhost:3306\)/gobm_t up
       - run:
           name: vendoring
           command: go get -v -t -d ./...
