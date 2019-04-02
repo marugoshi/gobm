@@ -45,7 +45,7 @@ func (m testMysql) Fixtures(queries []string) {
 	for _, query := range queries {
 		err := exec.Command("mysql", host, "-uroot", "-ppassword", "gobm_t", "-e", query).Run()
 		if err != nil {
-			m.t.Fatalf("can not create: %v", err)
+			m.t.Fatalf("can not create: %v %s", err, host)
 		}
 	}
 }
