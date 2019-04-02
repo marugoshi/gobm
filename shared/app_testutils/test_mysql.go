@@ -41,8 +41,9 @@ func (m testMysql) GetInstance() *sql.DB {
 }
 
 func (m testMysql) Fixtures(queries []string) {
+	host := fmt.Sprintf("-h%s", os.Getenv("DB_HOST"))
 	for _, query := range queries {
-		err := exec.Command("mysql", "-hmysql", "-uroot", "-ppassword", "gobm_t", "-e", query).Run()
+		err := exec.Command("mysql", host, "-uroot", "-ppassword", "gobm_t", "-e", query).Run()
 		if err != nil {
 			m.t.Fatalf("can not create: %v", err)
 		}
@@ -50,9 +51,10 @@ func (m testMysql) Fixtures(queries []string) {
 }
 
 func (m testMysql) Truncates(tables []string) {
+	host := fmt.Sprintf("-h%s", os.Getenv("DB_HOST"))
 	for _, table := range tables {
 		query := fmt.Sprintf("TRUNCATE %s", table)
-		err := exec.Command("mysql", "-hmysql", "-uroot", "-ppassword", "gobm_t", "-e", query).Run()
+		err := exec.Command("mysql", host, "-uroot", "-ppassword", "gobm_t", "-e", query).Run()
 		if err != nil {
 			m.t.Fatalf("can not truncate: %v", err)
 		}
