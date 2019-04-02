@@ -7,12 +7,16 @@ import (
 )
 
 type BookmarkService interface {
-	Bookmarks(ctx context.Context) (interface{}, error)
+	Bookmarks(ctx context.Context, page int, perPage int) (interface{}, error)
 	Bookmark(ctx context.Context, id int64) (interface{}, error)
 	Create(ctx context.Context, bookmark *entity.Bookmark) (interface{}, error)
 	Update(ctx context.Context, bookmark *entity.Bookmark) (interface{}, error)
 	Delete(ctx context.Context, id int64) error
 }
+
+const (
+	PER_PAGE = 30
+)
 
 type bookmarkService struct {
 	model.BookmarkModel
@@ -22,12 +26,27 @@ func NewBookmarkService(m model.BookmarkModel) BookmarkService {
 	return &bookmarkService{m}
 }
 
-func (b *bookmarkService) Bookmarks(ctx context.Context) (interface{}, error) {
-	bookmarks, err := b.BookmarkModel.All(ctx, 1, 100)
+func (b *bookmarkService) Bookmarks(ctx context.Context, page int, perPage int) (interface{}, error) {
+	if page == 0 {
+		page = 1
+	}
+
+	if perPage == 0 {
+		perPage = PER_PAGE
+	}
+
+	bookmarks, err := b.BookmarkModel.All(ctx, page, perPage)
 	if err != nil {
 		return nil, err
 	}
-	return bookmarks, nil
+
+	data := struct {
+		Records []*entity.Bookmark
+	}{
+		bookmarks,
+	}
+
+	return data, nil
 }
 
 func (b *bookmarkService) Bookmark(ctx context.Context, id int64) (interface{}, error) {
